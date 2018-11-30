@@ -227,7 +227,7 @@ int main(void){
     srunner_run_all(sr, CK_VERBOSE);
     failed = srunner_ntests_failed(sr);
     srunner_free(sr);
-
+ 
     return (failed ? EXIT_FAILURE : EXIT_SUCCESS);
 
 }
