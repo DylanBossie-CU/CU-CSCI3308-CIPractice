@@ -12,7 +12,7 @@
 
 #include <stdlib.h>
 #include <check.h>
-
+#include <stdio.h>
 #include "geometry.h"
 
 /* coord_2d_eq Test */
@@ -145,6 +145,46 @@ START_TEST(test_2d_midpoint)
 }
 END_TEST
 
+START_TEST(test_triangle_float_area) {
+coord_2d_t a;
+coord_2d_t b;
+coord_2d_t c;
+double expectedArea;
+double area;
+
+a.x = 0;
+a.y = 0;
+b.x = 1;
+b.y = 0;
+c.x = 0;
+c.y = 1;
+area = coord_2d_area_triangle(&a,&b,&c);
+expectedArea = 0.5;
+ck_assert(check_triangle_area(area,expectedArea));
+}
+END_TEST
+
+START_TEST(test_triangle_negative_area) {
+coord_2d_t a;
+coord_2d_t b;
+coord_2d_t c;
+double expectedArea;
+double area = 0;
+
+a.x = 0;
+a.y = 0;
+b.x = -1;
+b.y = -1;
+c.x = -1;
+c.y = 0;
+area = coord_2d_area_triangle(&a,&b,&c);
+printf("%f\n",area);
+expectedArea = 0.5;
+printf("%f\n",expectedArea);
+ck_assert(check_triangle_area(area,expectedArea));
+}
+END_TEST
+
 /* coord_2d Test Suite */
 Suite* coord_2d_suite(void)
 {
@@ -162,11 +202,17 @@ Suite* coord_2d_suite(void)
     TCase* tc_2d_midpoint = tcase_create("coord_2d_midpoint");
     tcase_add_test(tc_2d_midpoint, test_2d_midpoint);
 
+    TCase* tc_2d_area = tcase_create("coord_2d_eq");
+    tcase_add_test(tc_2d_area, test_triangle_float_area);
+   
+    TCase* tc_2d_negarea = tcase_create("coord_2d_eq");
+    tcase_add_test(tc_2d_negarea,test_triangle_negative_area);
     /* Add Cases to Suite */
     suite_add_tcase(s, tc_2d_eq);
     suite_add_tcase(s, tc_2d_dist);
     suite_add_tcase(s, tc_2d_midpoint);
-
+    suite_add_tcase(s, tc_2d_area);
+    suite_add_tcase(s, tc_2d_negarea);
     /* Return Suite */
     return s;
 
